@@ -1,5 +1,18 @@
 import { DragEvent } from "react";
 
+export interface DrawingCanvasProps {
+  width: number;
+  height: number;
+  imageUrl: string;
+  onSave: (dataURL: string) => void;
+  transformations: {
+    rotation: number;
+    scale: number;
+    flipHorizontal: boolean;
+    flipVertical: boolean;
+  };
+}
+
 export interface ImageUploaderProps {
   onUpload: (src: string) => void;
 }

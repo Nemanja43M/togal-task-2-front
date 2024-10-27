@@ -1,0 +1,40 @@
+.dragAndDropZone {
+  border: 2px dashed #aaa;
+  margin-bottom: 10px;
+  max-width: 500px;
+  padding: 50px 20px;
+  text-align: center;
+  background-color: #f9f9f9;
+  color: #7494ec;
+  transition: background-color 0.3s, border-color 0.3s;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.dragging {
+  border-color: #7494ec;
+  background-color: #e8f0fe;
+}
+
+.icon {
+  font-size: 64px;
+  color: #7494ec;
+  margin-bottom: 15px;
+}
+.text {
+  font-size: 16px;
+  color: #555;
+}
+.mainDiv {
+  display: flex; /* Aktiviraj flexbox */
+  flex-direction: column; /* Poređaj decu u koloni */
+  align-items: center; /* Centriraj decu horizontalno */
+  justify-content: center; /* Centriraj decu vertikalno */
+  height: 100vh; /* Postavi visinu na 100% visine prozora */
+  padding: 16px; /* Unutrašnji razmak */
+  box-sizing: border-box; /* Uključuj padding u ukupan width i height */
+}

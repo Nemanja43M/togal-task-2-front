@@ -1,6 +1,6 @@
 import React from "react";
-import { Button } from "@mui/material";
 import { CustomButtonProps } from "../interfaces/interfaces";
+import { StyledButton } from "./style/StyledMix";
 
 const CustomButton: React.FC<CustomButtonProps> = ({
   onClick,
@@ -8,9 +8,9 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   disabled,
 }) => {
   return (
-    <Button variant="contained" onClick={onClick} disabled={disabled}>
+    <StyledButton variant="contained" onClick={onClick} disabled={disabled}>
       {label}
-    </Button>
+    </StyledButton>
   );
 };
 

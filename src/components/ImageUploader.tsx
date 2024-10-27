@@ -4,6 +4,8 @@ import { uploadImage } from "../api/api";
 import ImageViewer from "./ImageViewer";
 import { useDragAndDrop } from "../hooks/useDragAndDrop";
 import CustomButton from "./CustomButton";
+import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
+import styles from "./style/DragAndDrop.module.css";
 
 const ImageUploader: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -49,21 +51,23 @@ const ImageUploader: React.FC = () => {
     useDragAndDrop((droppedFile) => handleFileSelect(droppedFile));
 
   return (
-    <div>
+    <div className={styles.mainDiv}>
       <div
+        onClick={() => fileInputRef.current?.click()}
         onDragEnter={onDragEnter}
         onDragLeave={onDragLeave}
         onDragOver={onDragOver}
         onDrop={onDrop}
-        style={{
-          border: isDragging ? "2px dashed #000" : "2px dashed #aaa",
-          padding: "30px",
-          textAlign: "center",
-          backgroundColor: isDragging ? "#f0f0f0" : "transparent",
-        }}
+        className={`${styles.dragAndDropZone} ${
+          isDragging ? styles.dragging : ""
+        }`}
       >
-        Drag and Drop
+        <CloudUploadOutlinedIcon className={styles.icon} />
+        <p className={styles.text}>
+          Drag and drop your files here, or click to upload
+        </p>
       </div>
+
       <input
         accept="image/*"
         type="file"
@@ -74,12 +78,6 @@ const ImageUploader: React.FC = () => {
         ref={fileInputRef}
         style={{ display: "none" }}
       />
-      <label htmlFor="upload-button">
-        <CustomButton
-          label="Select Image"
-          onClick={() => fileInputRef.current?.click()}
-        />
-      </label>
       <CustomButton
         label="Upload Image"
         onClick={handleUpload}
