@@ -1,51 +1,66 @@
-import React, { useState } from 'react';
-import { Button } from '@mui/material';
-import { ImageViewerProps } from '../interfaces/interfaces';
+import React from "react";
+import { ImageViewerProps } from "../interfaces/interfaces";
+import { useImageReducer } from "../hooks/useUndoRedo";
+import CustomButton from "./CustomButton";
 
 const ImageViewer: React.FC<ImageViewerProps> = ({ src }) => {
-  const [rotation, setRotation] = useState<number>(0); 
-  const [scale, setScale] = useState<number>(1); 
+  const { state, dispatch } = useImageReducer();
 
   if (!src) return null;
 
-  const rotateImage = () => {
-    setRotation((prev) => prev + 90); 
-  };
-
-  const scaleImage = (factor: number) => {
-    setScale((prev) => Math.max(prev + factor, 0.1)); 
-  };
-
-  const resetImage = () => {
-    setRotation(0);
-    setScale(1);
-  };
-
   return (
-    <div style={{ marginTop: '20px', textAlign: 'center' }}>
+    <div style={{ marginTop: "20px", textAlign: "center" }}>
       <img
         src={src}
         alt="Uploaded"
         style={{
-          maxWidth: '100%',
-          transform: `rotate(${rotation}deg) scale(${scale})`,
-          transition: 'transform 0.2s ease-in-out',
-          marginBottom: '20px',
+          maxWidth: "100%",
+          transform: `rotate(${state.transformations.rotation}deg) scale(${
+            state.transformations.scale
+          }) ${state.transformations.flipHorizontal ? "scaleX(-1)" : ""} ${
+            state.transformations.flipVertical ? "scaleY(-1)" : ""
+          }`,
+          transition: "transform 0.2s ease-in-out",
+          marginBottom: "20px",
         }}
       />
       <div>
-        <Button variant="contained" onClick={rotateImage}>
-          Rotate 90°
-        </Button>
-        <Button variant="contained" onClick={() => scaleImage(0.1)}>
-          Zoom In
-        </Button>
-        <Button variant="contained" onClick={() => scaleImage(-0.1)}>
-          Zoom Out
-        </Button>
-        <Button variant="contained" onClick={resetImage}>
-          Reset
-        </Button>
+        <div>
+          <CustomButton
+            onClick={() => dispatch({ type: "rotate" })}
+            label="Rotate 90°"
+          />
+          <CustomButton
+            onClick={() => dispatch({ type: "scale", payload: 0.1 })}
+            label="Zoom In"
+          />
+          <CustomButton
+            onClick={() => dispatch({ type: "scale", payload: -0.1 })}
+            label="Zoom Out"
+          />
+          <CustomButton
+            onClick={() => dispatch({ type: "reset" })}
+            label="Reset"
+          />
+          <CustomButton
+            onClick={() => dispatch({ type: "flipHorizontal" })}
+            label="Flip Horizontal"
+          />
+          <CustomButton
+            onClick={() => dispatch({ type: "flipVertical" })}
+            label="Flip Vertical"
+          />
+          <CustomButton
+            onClick={() => dispatch({ type: "undo" })}
+            label="Undo"
+            disabled={!state.history.length}
+          />
+          <CustomButton
+            onClick={() => dispatch({ type: "redo" })}
+            label="Redo"
+            disabled={!state.redoStack.length}
+          />
+        </div>
       </div>
     </div>
   );

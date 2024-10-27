@@ -21,3 +21,28 @@ export interface DragAndDropHandlers {
   onDrop: (e: DragEvent<HTMLDivElement>) => void;
   isDragging: boolean;
 }
+export interface Transformation {
+  rotation: number;
+  scale: number;
+  flipHorizontal: boolean;
+  flipVertical: boolean;
+}
+export interface CustomButtonProps {
+  onClick: () => void;
+  label: string;
+  disabled?: boolean;
+}
+export type State = {
+  transformations: Transformation;
+  history: Transformation[];
+  redoStack: Transformation[];
+};
+
+export type Action =
+  | { type: "rotate" }
+  | { type: "scale"; payload: number }
+  | { type: "reset" }
+  | { type: "flipHorizontal" }
+  | { type: "flipVertical" }
+  | { type: "undo" }
+  | { type: "redo" };

@@ -1,8 +1,9 @@
 import React, { useState, ChangeEvent, useRef } from "react";
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { uploadImage } from "../api/api";
 import ImageViewer from "./ImageViewer";
 import { useDragAndDrop } from "../hooks/useDragAndDrop";
+import CustomButton from "./CustomButton";
 
 const ImageUploader: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -10,25 +11,24 @@ const ImageUploader: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleDropFile = (droppedFile: File) => {
-    const validExtensions = ["image/jpeg", "image/png"];
-    if (!validExtensions.includes(droppedFile.type)) {
-      setError("Please upload a file in JPG or PNG format.");
-      setFile(null);
-      setImageSrc(null);
-      return;
+  const handleFileSelect = (selectedFile: File | null) => {
+    if (selectedFile) {
+      const validExtensions = ["image/jpeg", "image/png"];
+      if (validExtensions.includes(selectedFile.type)) {
+        setFile(selectedFile);
+        setImageSrc(URL.createObjectURL(selectedFile));
+        setError(null);
+      } else {
+        setError("Please upload a file in JPG or PNG format.");
+        resetState();
+      }
     }
-
-    setFile(droppedFile);
-    setImageSrc(URL.createObjectURL(droppedFile));
-    setError(null);
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const selectedFile = e.target.files[0];
-      handleDropFile(selectedFile);
-    }
+  const resetState = () => {
+    setFile(null);
+    setImageSrc(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleUpload = async () => {
@@ -39,18 +39,14 @@ const ImageUploader: React.FC = () => {
 
     try {
       await uploadImage(formData);
-      setFile(null);
-      setImageSrc(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
+      resetState();
     } catch (error) {
       setError("Failed to upload the image. Please try again.");
     }
   };
 
   const { onDragEnter, onDragLeave, onDragOver, onDrop, isDragging } =
-    useDragAndDrop(handleDropFile);
+    useDragAndDrop((droppedFile) => handleFileSelect(droppedFile));
 
   return (
     <div>
@@ -66,24 +62,29 @@ const ImageUploader: React.FC = () => {
           backgroundColor: isDragging ? "#f0f0f0" : "transparent",
         }}
       >
-        Drad and Drop
+        Drag and Drop
       </div>
       <input
         accept="image/*"
         type="file"
-        onChange={handleFileChange}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          handleFileSelect(e.target.files?.[0] || null)
+        }
         id="upload-button"
         ref={fileInputRef}
         style={{ display: "none" }}
       />
       <label htmlFor="upload-button">
-        <Button variant="contained" component="span">
-          Select Image
-        </Button>
+        <CustomButton
+          label="Select Image"
+          onClick={() => fileInputRef.current?.click()}
+        />
       </label>
-      <Button variant="contained" onClick={handleUpload} disabled={!file}>
-        Upload Image
-      </Button>
+      <CustomButton
+        label="Upload Image"
+        onClick={handleUpload}
+        disabled={!file}
+      />
       {error && <Typography color="error">{error}</Typography>}
       <ImageViewer src={imageSrc} />
     </div>
