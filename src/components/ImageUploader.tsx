@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, useRef } from "react";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { uploadImage } from "../api/api";
 import ImageViewer from "./ImageViewer";
 import { useDragAndDrop } from "../hooks/useDragAndDrop";
@@ -51,23 +51,42 @@ const ImageUploader: React.FC = () => {
     useDragAndDrop((droppedFile) => handleFileSelect(droppedFile));
 
   return (
-    <div className={styles.mainDiv}>
-      <div
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      sx={{ height: "100vh", padding: 2 }}
+    >
+      <Box
         onClick={() => fileInputRef.current?.click()}
         onDragEnter={onDragEnter}
         onDragLeave={onDragLeave}
         onDragOver={onDragOver}
         onDrop={onDrop}
-        className={`${styles.dragAndDropZone} ${
-          isDragging ? styles.dragging : ""
-        }`}
+        sx={{
+          marginTop: 5,
+          border: "2px dashed #aaa",
+          maxWidth: 500,
+          padding: 4,
+          textAlign: "center",
+          backgroundColor: isDragging ? "#e8f0fe" : "#f9f9f9",
+          color: "#7494ec",
+          borderRadius: 2,
+          cursor: "pointer",
+          transition: "background-color 0.3s, border-color 0.3s",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
       >
-        <CloudUploadOutlinedIcon className={styles.icon} />
-        <p className={styles.text}>
+        <CloudUploadOutlinedIcon
+          sx={{ fontSize: 64, color: "#7494ec", marginBottom: 1 }}
+        />
+        <Typography variant="body1">
           Drag and drop your files here, or click to upload
-        </p>
-      </div>
-
+        </Typography>
+      </Box>
       <input
         accept="image/*"
         type="file"
@@ -78,14 +97,9 @@ const ImageUploader: React.FC = () => {
         ref={fileInputRef}
         style={{ display: "none" }}
       />
-      <CustomButton
-        label="Upload Image"
-        onClick={handleUpload}
-        disabled={!file}
-      />
       {error && <Typography color="error">{error}</Typography>}
-      <ImageViewer src={imageSrc} />
-    </div>
+      <ImageViewer src={imageSrc} file={file} handleUpload={handleUpload} />
+    </Box>
   );
 };
 

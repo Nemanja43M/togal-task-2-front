@@ -1,4 +1,6 @@
 .dragAndDropZone {
+  display: flex;
+  justify-content: center;
   border: 2px dashed #aaa;
   margin-bottom: 10px;
   max-width: 500px;
@@ -25,6 +27,7 @@
   color: #7494ec;
   margin-bottom: 15px;
 }
+
 .text {
   font-size: 16px;
   color: #555;
@@ -32,7 +35,7 @@
 .mainDiv {
   display: flex; /* Aktiviraj flexbox */
   flex-direction: column; /* Poređaj decu u koloni */
-  align-items: center; /* Centriraj decu horizontalno */
+  align-items: center;
   justify-content: center; /* Centriraj decu vertikalno */
   height: 100vh; /* Postavi visinu na 100% visine prozora */
   padding: 16px; /* Unutrašnji razmak */

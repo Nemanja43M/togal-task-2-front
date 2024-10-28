@@ -6,10 +6,11 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   onClick,
   label,
   disabled,
+  startIcon,
 }) => {
   return (
     <StyledButton variant="contained" onClick={onClick} disabled={disabled}>
-      {label}
+      {startIcon && <span style={{ marginRight: 8 }}>{startIcon}</span>} {label}
     </StyledButton>
   );
 };

@@ -1,14 +1,15 @@
 import React, { useRef, useState, useEffect } from "react";
 import { DrawingCanvasProps } from "../interfaces/interfaces";
+import styles from "./style/DrawingCanvas.module.css";
 
 const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   width,
   height,
   imageUrl,
-  onSave,
+  setDataURL,
   transformations,
+  canvasRef,
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
 
   const handleMouseEvent = (e: React.MouseEvent | React.TouchEvent) => {
@@ -37,7 +38,9 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
 
   const saveImage = () => {
     const dataURL = canvasRef.current?.toDataURL("image/png");
-    if (dataURL) onSave(dataURL);
+    if (dataURL) {
+      setDataURL(dataURL);
+    }
   };
 
   useEffect(() => {
@@ -69,7 +72,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   }, [imageUrl, transformations, width, height]);
 
   return (
-    <div>
+    <div className={styles.container}>
       <canvas
         ref={canvasRef}
         width={width}
@@ -81,9 +84,8 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
         onTouchStart={() => toggleDrawing(true)}
         onTouchEnd={() => toggleDrawing(false)}
         onTouchMove={handleMouseEvent}
-        style={{ border: "1px solid #000", position: "relative", zIndex: 1 }}
+        className={styles.canvas}
       />
-      <button onClick={saveImage}>Sačuvaj nacrtano</button>
     </div>
   );
 };

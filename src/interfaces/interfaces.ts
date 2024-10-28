@@ -1,10 +1,12 @@
 import { DragEvent } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 export interface DrawingCanvasProps {
   width: number;
   height: number;
   imageUrl: string;
-  onSave: (dataURL: string) => void;
+  canvasRef: React.RefObject<HTMLCanvasElement>;
+  setDataURL: Dispatch<SetStateAction<string | null>>;
   transformations: {
     rotation: number;
     scale: number;
@@ -26,7 +28,10 @@ export interface UploadResponse {
 
 export interface ImageViewerProps {
   src: string | null;
+  file: File | null;
+  handleUpload: () => Promise<void>;
 }
+
 export interface DragAndDropHandlers {
   onDragEnter: (e: DragEvent<HTMLDivElement>) => void;
   onDragLeave: (e: DragEvent<HTMLDivElement>) => void;
@@ -44,6 +49,7 @@ export interface CustomButtonProps {
   onClick: () => void;
   label: string;
   disabled?: boolean;
+  startIcon?: JSX.Element;
 }
 export type State = {
   transformations: Transformation;
