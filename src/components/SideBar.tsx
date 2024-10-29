@@ -7,7 +7,7 @@ import { Box, List, Divider, IconButton } from "@mui/material";
 
 import { StyledNavbar, StyledNavbarHeader } from "./style/styled";
 
-// import logo from "../../public/media/logo-white.svg";
+import logo from "../img/64c804c83c2a878381a29da5_logo_togal.png";
 import { SidebarItem } from "./SidebarItem";
 
 export const Sidebar = () => {
@@ -22,7 +22,7 @@ export const Sidebar = () => {
       <StyledNavbarHeader>
         {open && (
           <Box>
-            <img src={""} alt="Logo" />
+            <img src={logo} alt="Logo" height="34px%" />
           </Box>
         )}
         <IconButton onClick={handleToggleDrawer}>

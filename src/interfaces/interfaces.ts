@@ -30,6 +30,7 @@ export interface ImageViewerProps {
   src: string | null;
   file: File | null;
   handleUpload: () => Promise<void>;
+  setImageSrc?: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export interface DragAndDropHandlers {
