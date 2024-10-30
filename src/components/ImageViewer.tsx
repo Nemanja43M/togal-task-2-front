@@ -97,19 +97,12 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
           accept="image/*"
           onChange={handleNewImage}
         />
-
-        {/* <ToolbarItem
-          label="Save Image"
-          onClick={handleUpload}
-          disabled={!file}
-          icon={<CloudUploadOutlinedIcon />}
-        /> */}
         <ToolbarItem
           onClick={() => {
             const dataURL = canvasRef.current?.toDataURL("image/png");
             if (dataURL) handleSave(dataURL);
           }}
-          label="Save Drawing"
+          label="Save Image"
           icon={<SaveOutlinedIcon />}
         />
         <ToolbarItem

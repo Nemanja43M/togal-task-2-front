@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { Box, List, Divider, IconButton, Typography } from "@mui/material";
-
 import { StyledNavbar, StyledNavbarHeader } from "./style/styled";
-
 import logo from "../img/64c804c83c2a878381a29da5_logo_togal.png";
 import { SidebarItem } from "./SidebarItem";
 import { FileResponse } from "../interfaces/interfaces";
@@ -56,7 +53,20 @@ export const Sidebar = () => {
       <StyledNavbarHeader>
         {open && (
           <Box>
-            <img src={logo} alt="Logo" height="34px%" />
+            <img
+              src={logo}
+              alt="Logo"
+              height="27px%"
+              style={{ marginTop: "17%" }}
+            />
+            <Typography
+              style={{
+                fontWeight: "bold",
+                color: "#333",
+              }}
+            >
+              Your images
+            </Typography>
           </Box>
         )}
         <IconButton onClick={handleToggleDrawer}>

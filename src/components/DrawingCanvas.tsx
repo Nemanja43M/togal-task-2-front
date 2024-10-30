@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DrawingCanvasProps } from "../interfaces/interfaces";
 import styles from "./style/DrawingCanvas.module.css";
+import Cube from "./Cube";
 
 const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   width,
@@ -48,7 +49,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       ctx?.rotate((transformations.rotation * Math.PI) / 180);
 
       const initialScale = Math.min(width / img.width, height / img.height);
-
       const finalScale = initialScale * (transformations.scale || 1);
 
       ctx?.scale(
@@ -57,7 +57,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       );
 
       ctx?.drawImage(img, -img.width / 2, -img.height / 2);
-
       ctx?.restore();
     };
 
@@ -70,6 +69,9 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
 
   return (
     <div className={styles.container}>
+      <div className={styles.cube}>
+        <Cube imageUrl={imageUrl} />
+      </div>
       <canvas
         ref={canvasRef}
         width={width}
