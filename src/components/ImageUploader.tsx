@@ -4,7 +4,6 @@ import { uploadImage } from "../api/api";
 import ImageViewer from "./ImageViewer";
 import { useDragAndDrop } from "../hooks/useDragAndDrop";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
-import styles from "./style/DragAndDrop.module.css";
 
 const ImageUploader: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -40,6 +39,8 @@ const ImageUploader: React.FC = () => {
 
     try {
       await uploadImage(formData);
+
+      window.dispatchEvent(new CustomEvent("FileUploaded"));
       resetState();
     } catch (error) {
       setError("Failed to upload the image. Please try again.");
@@ -62,15 +63,14 @@ const ImageUploader: React.FC = () => {
       }}
     >
       {imageSrc ? (
-        // Ako postoji slika, prikaži samo ImageViewer
         <ImageViewer
+          setFile={setFile}
           src={imageSrc}
           file={file}
           handleUpload={handleUpload}
           setImageSrc={setImageSrc}
         />
       ) : (
-        // Ako nema slike, prikaži drag-and-drop komponentu
         <Box
           onClick={() => fileInputRef.current?.click()}
           onDragEnter={onDragEnter}

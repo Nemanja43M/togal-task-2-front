@@ -22,7 +22,6 @@ export const StyledButton = styled(Button)<StyledButtonProps>(() => ({
   },
 }));
 
-// Mixins for MUI elements (Navbar)
 export const openedMixin = (theme: Theme): CSSObject => ({
   width: 240,
   transition: theme.transitions.create("width", {

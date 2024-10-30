@@ -1,5 +1,5 @@
 import { DragEvent } from "react";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, MouseEventHandler } from "react";
 
 export interface DrawingCanvasProps {
   width: number;
@@ -31,6 +31,7 @@ export interface ImageViewerProps {
   file: File | null;
   handleUpload: () => Promise<void>;
   setImageSrc?: React.Dispatch<React.SetStateAction<string | null>>;
+  setFile?: React.Dispatch<React.SetStateAction<File | null>>;
 }
 
 export interface DragAndDropHandlers {
@@ -66,3 +67,18 @@ export type Action =
   | { type: "flipVertical" }
   | { type: "undo" }
   | { type: "redo" };
+export interface FileResponse {
+  id: number;
+  filename: string;
+  mimetype: string;
+}
+export interface UploadResponse {
+  id: number;
+  filename: string;
+}
+export interface SidebarItemProps {
+  id: number;
+  open: boolean;
+  title: string;
+  onClick: MouseEventHandler;
+}

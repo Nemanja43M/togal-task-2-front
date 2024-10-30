@@ -12,11 +12,9 @@ export const ToolbarItem = ({
       <span>
         <StyledIconBtn onClick={onClick} disabled={disabled}>
           {icon}
-          {/* {!isSmallScreen && ( */}
           <Typography variant="body2" sx={{ ml: 1 }}>
             {label}
           </Typography>
-          {/* // )} */}
         </StyledIconBtn>
       </span>
     </Tooltip>

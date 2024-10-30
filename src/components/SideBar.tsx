@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -9,13 +9,39 @@ import { StyledNavbar, StyledNavbarHeader } from "./style/styled";
 
 import logo from "../img/64c804c83c2a878381a29da5_logo_togal.png";
 import { SidebarItem } from "./SidebarItem";
+import { FileResponse } from "../interfaces/interfaces";
+import { getAllFiles } from "../api/api";
 
 export const Sidebar = () => {
   const [open, setOpen] = useState(true);
+  const [files, setFiles] = useState<FileResponse[]>([]);
 
   const handleToggleDrawer = () => {
     setOpen((prevState) => !prevState);
   };
+  const fetchFiles = async () => {
+    try {
+      const allFiles = await getAllFiles();
+      setFiles(allFiles);
+    } catch (error) {
+      console.error("Failed to fetch files:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFiles();
+
+    const handleFileUploaded = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      fetchFiles();
+    };
+
+    window.addEventListener("FileUploaded", handleFileUploaded);
+
+    return () => {
+      window.removeEventListener("FileUploaded", handleFileUploaded);
+    };
+  }, []);
 
   return (
     <StyledNavbar variant="permanent" open={open}>
@@ -31,12 +57,17 @@ export const Sidebar = () => {
       </StyledNavbarHeader>
       <Divider />
       <List>
-        <SidebarItem
-          open={open}
-          icon={<BrokenImageOutlinedIcon />}
-          title="Image1"
-          onClick={() => {}}
-        />
+        {files.map((file) => (
+          <SidebarItem
+            key={file.id}
+            id={file.id}
+            open={open}
+            title={file.filename}
+            onClick={() => {
+              console.log(`Selected file ID: ${file.id}`);
+            }}
+          />
+        ))}
       </List>
     </StyledNavbar>
   );

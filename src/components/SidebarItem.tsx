@@ -1,22 +1,17 @@
 import React, { MouseEventHandler } from "react";
-
 import {
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
+import { SidebarItemProps } from "../interfaces/interfaces";
 
-export const SidebarItem = ({
+export const SidebarItem: React.FC<SidebarItemProps> = ({
+  id,
   open,
-  icon,
   title,
   onClick,
-}: {
-  open: boolean;
-  icon: JSX.Element;
-  title: string;
-  onClick: MouseEventHandler;
 }) => {
   return (
     <ListItem disablePadding sx={{ display: "block" }}>
@@ -33,11 +28,22 @@ export const SidebarItem = ({
             minWidth: 0,
             mr: open ? 3 : "auto",
             justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          {icon}
+          <img
+            src={`http://localhost:4000/file/${id}`}
+            alt={title}
+            style={{
+              width: 200,
+              height: 120,
+              borderRadius: "4px",
+              display: open ? "block" : "none",
+            }}
+          />
         </ListItemIcon>
-        <ListItemText primary={title} sx={{ opacity: open ? 1 : 0 }} />
+        {open && <ListItemText primary={title} sx={{ textAlign: "center" }} />}
       </ListItemButton>
     </ListItem>
   );

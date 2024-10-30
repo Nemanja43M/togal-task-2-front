@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { ImageViewerProps } from "../interfaces/interfaces";
-import { useImageReducer } from "../hooks/useUndoRedo";
+import { useImageReducer } from "../hooks/useImageFunkcionality";
 import DrawingCanvas from "./DrawingCanvas";
 import { uploadImage } from "../api/api";
 import styles from "./style/ImageViewer.module.css";
@@ -13,6 +13,7 @@ import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
 import FlipOutlinedIcon from "@mui/icons-material/FlipOutlined";
 import UndoOutlinedIcon from "@mui/icons-material/UndoOutlined";
 import RedoOutlinedIcon from "@mui/icons-material/RedoOutlined";
+import ImageIcon from "@mui/icons-material/Image";
 import { EditorToolbar } from "./EditorToolbar";
 import { ToolbarItem } from "./ToolbarItem";
 
@@ -21,6 +22,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
   file,
   handleUpload,
   setImageSrc,
+  setFile,
 }) => {
   const { state, dispatch } = useImageReducer();
   const [dataURL, setDataURL] = useState<string | null>(null);
@@ -50,7 +52,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
 
     try {
       await uploadImage(formData);
-      console.log("Image uploaded successfully!");
+      window.dispatchEvent(new CustomEvent("FileUploaded"));
       resetCanvas();
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -61,10 +63,12 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
     if (selectedFile) {
       const validExtensions = ["image/jpeg", "image/png"];
       if (validExtensions.includes(selectedFile.type)) {
-        // Ako je slika validna, postavite je u stanje
         const newImageSrc = URL.createObjectURL(selectedFile);
         if (setImageSrc) {
-          setImageSrc(newImageSrc); // Ažurirajte stanje sa novom slikom
+          setImageSrc(newImageSrc);
+        }
+        if (setFile) {
+          setFile(selectedFile);
         }
       }
     }
@@ -82,16 +86,16 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
       />
       <EditorToolbar>
         <ToolbarItem
-          label="Zameni sliku"
-          onClick={() => document.getElementById("file-input")?.click()} // Otvorite dijalog za izbor fajla
-          icon={<CloudUploadOutlinedIcon />}
+          label="Change image"
+          onClick={() => document.getElementById("file-input")?.click()}
+          icon={<ImageIcon />}
         />
         <input
           type="file"
           id="file-input"
-          style={{ display: "none" }} // Sakrijte input
+          style={{ display: "none" }}
           accept="image/*"
-          onChange={handleNewImage} // Poziv funkcije kada se nova slika odabere
+          onChange={handleNewImage}
         />
 
         <ToolbarItem
@@ -105,7 +109,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
             const dataURL = canvasRef.current?.toDataURL("image/png");
             if (dataURL) handleSave(dataURL);
           }}
-          label="Sačuvaj nacrtano"
+          label="Save Drawing"
           icon={<SaveOutlinedIcon />}
         />
         <ToolbarItem
