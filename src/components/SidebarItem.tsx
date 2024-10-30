@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from "react";
+import React from "react";
 import {
   ListItem,
   ListItemButton,
@@ -13,6 +13,8 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
   title,
   onClick,
 }) => {
+  console.log(`Fetching image with ID: ${id}`);
+
   return (
     <ListItem disablePadding sx={{ display: "block" }}>
       <ListItemButton
@@ -40,6 +42,9 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
               height: 120,
               borderRadius: "4px",
               display: open ? "block" : "none",
+            }}
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
             }}
           />
         </ListItemIcon>

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { DrawingCanvasProps } from "../interfaces/interfaces";
 import styles from "./style/DrawingCanvas.module.css";
 
@@ -36,13 +36,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     }
   };
 
-  const saveImage = () => {
-    const dataURL = canvasRef.current?.toDataURL("image/png");
-    if (dataURL) {
-      setDataURL(dataURL);
-    }
-  };
-
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d");
     const img = new Image();
@@ -52,15 +45,21 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       ctx?.save();
       ctx?.translate(width / 2, height / 2);
       ctx?.rotate((transformations.rotation * Math.PI) / 180);
-      ctx?.scale(
-        transformations.flipHorizontal
-          ? -transformations.scale
-          : transformations.scale,
-        transformations.flipVertical
-          ? -transformations.scale
-          : transformations.scale
-      );
-      ctx?.drawImage(img, -img.width / 2, -img.height / 2);
+
+      const isImageTooLarge = img.width > width || img.height > height;
+
+      if (isImageTooLarge) {
+        const scale = Math.min(width / img.width, height / img.height);
+        ctx?.scale(
+          transformations.flipHorizontal ? -scale : scale,
+          transformations.flipVertical ? -scale : scale
+        );
+        ctx?.drawImage(img, -img.width / 2, -img.height / 2);
+      } else {
+        ctx?.scale(1, 1);
+        ctx?.drawImage(img, -img.width / 2, -img.height / 2);
+      }
+
       ctx?.restore();
     };
 
