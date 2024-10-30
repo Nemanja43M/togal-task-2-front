@@ -15,6 +15,8 @@ const ImageUploader: React.FC = () => {
     if (selectedFile) {
       const validExtensions = ["image/jpeg", "image/png"];
       if (validExtensions.includes(selectedFile.type)) {
+        if (fileInputRef.current) fileInputRef.current.value = "";
+
         setFile(selectedFile);
         setImageSrc(URL.createObjectURL(selectedFile));
         setError(null);

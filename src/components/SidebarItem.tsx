@@ -13,8 +13,6 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
   title,
   onClick,
 }) => {
-  console.log(`Fetching image with ID: ${id}`);
-
   return (
     <ListItem disablePadding sx={{ display: "block" }}>
       <ListItemButton

@@ -6,7 +6,6 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   width,
   height,
   imageUrl,
-  setDataURL,
   transformations,
   canvasRef,
 }) => {
@@ -40,25 +39,24 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     const ctx = canvasRef.current?.getContext("2d");
     const img = new Image();
     img.src = imageUrl;
+
     img.onload = () => {
       ctx?.clearRect(0, 0, width, height);
       ctx?.save();
+
       ctx?.translate(width / 2, height / 2);
       ctx?.rotate((transformations.rotation * Math.PI) / 180);
 
-      const isImageTooLarge = img.width > width || img.height > height;
+      const initialScale = Math.min(width / img.width, height / img.height);
 
-      if (isImageTooLarge) {
-        const scale = Math.min(width / img.width, height / img.height);
-        ctx?.scale(
-          transformations.flipHorizontal ? -scale : scale,
-          transformations.flipVertical ? -scale : scale
-        );
-        ctx?.drawImage(img, -img.width / 2, -img.height / 2);
-      } else {
-        ctx?.scale(1, 1);
-        ctx?.drawImage(img, -img.width / 2, -img.height / 2);
-      }
+      const finalScale = initialScale * (transformations.scale || 1);
+
+      ctx?.scale(
+        transformations.flipHorizontal ? -finalScale : finalScale,
+        transformations.flipVertical ? -finalScale : finalScale
+      );
+
+      ctx?.drawImage(img, -img.width / 2, -img.height / 2);
 
       ctx?.restore();
     };

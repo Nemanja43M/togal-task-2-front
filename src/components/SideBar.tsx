@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import BrokenImageOutlinedIcon from "@mui/icons-material/BrokenImageOutlined";
-import { Box, List, Divider, IconButton } from "@mui/material";
+import { Box, List, Divider, IconButton, Typography } from "@mui/material";
 
 import { StyledNavbar, StyledNavbarHeader } from "./style/styled";
 
@@ -15,16 +14,25 @@ import { getAllFiles } from "../api/api";
 export const Sidebar = () => {
   const [open, setOpen] = useState(true);
   const [files, setFiles] = useState<FileResponse[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const handleToggleDrawer = () => {
     setOpen((prevState) => !prevState);
   };
+
   const fetchFiles = async () => {
+    setLoading(true);
+    setError(null);
+
     try {
       const allFiles = await getAllFiles();
       setFiles(allFiles);
     } catch (error) {
+      setError("Failed to fetch files.");
       console.error("Failed to fetch files:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,17 +65,25 @@ export const Sidebar = () => {
       </StyledNavbarHeader>
       <Divider />
       <List>
-        {files.map((file) => (
-          <SidebarItem
-            key={file.id}
-            id={file.id}
-            open={open}
-            title={file.filename}
-            onClick={() => {
-              console.log(`Selected file ID: ${file.id}`);
-            }}
-          />
-        ))}
+        {loading ? (
+          <Typography>Loading...</Typography>
+        ) : error ? (
+          <Typography color="error">{error}</Typography>
+        ) : files.length > 0 ? (
+          files.map((file) => (
+            <SidebarItem
+              key={file.id}
+              id={file.id}
+              open={open}
+              title={file.filename}
+              onClick={() => {
+                console.log(`Selected file ID: ${file.id}`);
+              }}
+            />
+          ))
+        ) : (
+          <Typography>No files available</Typography>
+        )}
       </List>
     </StyledNavbar>
   );
