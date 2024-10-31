@@ -4,7 +4,6 @@ import { useImageReducer } from "../hooks/useImageFunkcionality";
 import DrawingCanvas from "./DrawingCanvas";
 import { uploadImage } from "../api/api";
 import styles from "./style/ImageViewer.module.css";
-import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import RotateRightOutlinedIcon from "@mui/icons-material/RotateRightOutlined";
 import ZoomInOutlinedIcon from "@mui/icons-material/ZoomInOutlined";
@@ -20,7 +19,6 @@ import { ToolbarItem } from "./ToolbarItem";
 const ImageViewer: React.FC<ImageViewerProps> = ({
   src,
   file,
-  handleUpload,
   setImageSrc,
   setFile,
 }) => {
@@ -73,7 +71,6 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
       }
     }
   };
-
   return (
     <div className={styles.container}>
       <DrawingCanvas

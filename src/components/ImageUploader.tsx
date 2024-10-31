@@ -26,27 +26,10 @@ const ImageUploader: React.FC = () => {
       }
     }
   };
-
   const resetState = () => {
     setFile(null);
     setImageSrc(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
-  const handleUpload = async () => {
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try {
-      await uploadImage(formData);
-
-      window.dispatchEvent(new CustomEvent("FileUploaded"));
-      resetState();
-    } catch (error) {
-      setError("Failed to upload the image. Please try again.");
-    }
   };
 
   const { onDragEnter, onDragLeave, onDragOver, onDrop, isDragging } =
@@ -69,7 +52,6 @@ const ImageUploader: React.FC = () => {
           setFile={setFile}
           src={imageSrc}
           file={file}
-          handleUpload={handleUpload}
           setImageSrc={setImageSrc}
         />
       ) : (
