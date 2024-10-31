@@ -62,7 +62,7 @@ export const Sidebar = () => {
             <Typography
               style={{
                 fontWeight: "bold",
-                color: "#333",
+                color: "orange",
               }}
             >
               Your images
